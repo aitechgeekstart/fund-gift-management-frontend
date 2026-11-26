@@ -9,6 +9,7 @@ import Image from "next/image";
 
 export default function GiftCampaignInfo(props) {
   const {
+    id,
     name,
     status,
     imageUrl,
@@ -20,6 +21,8 @@ export default function GiftCampaignInfo(props) {
     giftPeriod,
     createdAt,
     createdBy,
+    publish,
+    loading,
   } = props;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -34,7 +37,7 @@ export default function GiftCampaignInfo(props) {
             color="secondary"
             sx={{ width: "80px" }}
             onClick={() => {
-              window.location = "/auth/gift_campaigns/new";
+              window.location = `/auth/gift_campaigns/${id}/edit`;
             }}
           >
             Edit
@@ -211,6 +214,14 @@ export default function GiftCampaignInfo(props) {
         </Grid>
 
         <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            loading={loading}
+            onClick={publish}
+          >
+            Publish
+          </Button>
           <Button variant="contained" color="warning">
             Disable Claim
           </Button>

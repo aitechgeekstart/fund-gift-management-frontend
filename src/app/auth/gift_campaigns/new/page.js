@@ -13,7 +13,7 @@ export default function Page() {
   const { fetcherWithToken } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     applicationConfig.setBreadcrumbs([
@@ -29,7 +29,7 @@ export default function Page() {
 
   const handleSubmit = async (_params) => {
     setLoading(true);
-    setError(null);
+    setError("");
     const allParams = convertToFormData(_params, "gift_campaign", ["images"]);
     const response = await fetcherWithToken("/api/v1/user/gift_campaigns", {
       method: "POST",

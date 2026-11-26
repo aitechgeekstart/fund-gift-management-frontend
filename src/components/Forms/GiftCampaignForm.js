@@ -15,7 +15,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { cloneDeep, isArray } from "lodash";
+import { isArray } from "lodash";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
@@ -90,7 +90,18 @@ export default function GiftCampaignForm(props) {
   const { enqueueSnackbar } = useSnackbar();
   const { initialData, handleSubmit, routerBack, loading } = props;
   const [formData, setFormData] = useImmer(
-    !!initialData?.id ? cloneDeep(initialData) : { ...defaultParams },
+    !!initialData?.id
+      ? {
+          ...defaultParams,
+          ...initialData,
+          ...(initialData.digital_enabled &&
+            initialData.digital_stock_limit === 0 && {
+              digital_type:
+                initialData.digital_stock_limit > 0 ? "manual" : "auto",
+            }),
+          physical_type: initialData.physical_enabled ? "allow" : "not_allow",
+        }
+      : { ...defaultParams },
   );
   const [error, setError] = useState({});
 
