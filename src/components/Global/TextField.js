@@ -45,6 +45,8 @@ const CustomTextField = (props) => {
     placeholder,
     disabled,
     type,
+    InputProps,
+    slotProps,
     ...others
   } = props;
   const ref = useRef();
@@ -64,6 +66,13 @@ const CustomTextField = (props) => {
       type={type}
       autoComplete="off"
       fullWidth
+      slotProps={{
+        ...slotProps,
+        input: {
+          ...InputProps,
+          ...slotProps?.input,
+        },
+      }}
       {...others}
     />
   );

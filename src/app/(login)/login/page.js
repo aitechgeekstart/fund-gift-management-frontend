@@ -1,4 +1,11 @@
 "use client";
+import {
+  Button,
+  FormLabel,
+  LegacyNextLink,
+  TextField,
+} from "@/components/Global";
+import { useAuth } from "@/hooks/use-auth";
 import LoginIcon from "@mui/icons-material/Login";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -16,13 +23,6 @@ import {
 import NextImage from "next/image";
 import { useState } from "react";
 import { useImmer } from "use-immer";
-import {
-  FormLabel,
-  LegacyNextLink,
-  LoadingButton,
-  TextField,
-} from "/src/components/Global";
-import { useAuth } from "/src/hooks/use-auth";
 
 const loginParams = {
   email: "",
@@ -107,11 +107,7 @@ export default function Page() {
     if (validateForm()) {
       setLoading(true);
       const token = localStorage.getItem("deviceToken") || "";
-      const json = await auth.loginV2(
-        loginForm.email,
-        loginForm.password,
-        token,
-      );
+      const json = await auth.login(loginForm.email, loginForm.password, token);
       if (json?.response.status === 201) {
         if (json.redirect_to_otp) {
           setOtpData((draft) => {
@@ -152,7 +148,12 @@ export default function Page() {
   };
 
   return (
-    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+    <Grid
+      size={{ xs: 12, sm: 8, md: 5 }}
+      component={Paper}
+      elevation={6}
+      square
+    >
       <Box
         sx={{
           my: 8,
@@ -178,10 +179,10 @@ export default function Page() {
             <Box sx={{ mt: 1 }}>
               {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
               <Grid container>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <FormLabel required>Email</FormLabel>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     required
                     value={loginForm.email}
@@ -198,10 +199,10 @@ export default function Page() {
                     placeholder="Email"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <FormLabel required>Password</FormLabel>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     required
                     value={loginForm.password}
@@ -239,7 +240,7 @@ export default function Page() {
                 </Grid>
               </Grid>
 
-              <LoadingButton
+              <Button
                 type="submit"
                 fullWidth
                 onClick={handleLogin}
@@ -253,7 +254,7 @@ export default function Page() {
                 sx={{ my: 1 }}
               >
                 SIGN IN
-              </LoadingButton>
+              </Button>
 
               <Grid
                 container
@@ -273,15 +274,15 @@ export default function Page() {
             <Box sx={{ mt: 1 }}>
               {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
               <Grid container>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <FormLabel required>OTP</FormLabel>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Typography color="primary" variant="caption">
                     REF : {otpData.otp_reference_code}
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     required
                     value={otpData.otp}
@@ -298,7 +299,7 @@ export default function Page() {
                     placeholder="OTP"
                   />
                 </Grid>
-                <Grid item xs={12} pt={1}>
+                <Grid size={12} pt={1}>
                   <FormControlLabel
                     sx={{
                       margin: 0,
@@ -318,7 +319,7 @@ export default function Page() {
                 </Grid>
               </Grid>
 
-              <LoadingButton
+              <Button
                 type="submit"
                 fullWidth
                 onClick={handleVerifyOtp}
@@ -330,12 +331,9 @@ export default function Page() {
                 sx={{ my: 1 }}
               >
                 VERIFY
-              </LoadingButton>
+              </Button>
 
-              <Grid
-                container
-                justifyContent={{ xs: "start", sm: "start", md: "end" }}
-              >
+              <Grid container sx={{ justifyContent: "end" }}>
                 <LegacyNextLink href="#" onClick={backToSignIn}>
                   BACK TO SIGN IN
                 </LegacyNextLink>

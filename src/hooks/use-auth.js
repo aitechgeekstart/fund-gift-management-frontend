@@ -1,10 +1,10 @@
 "use client";
+import { getApiPath } from "@/helpers";
 import { intersection } from "lodash";
 import { usePathname, useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { createContext, useContext, useEffect, useState } from "react";
 import useSWR from "swr";
-import { getApiPath } from "/src/helpers";
 
 const API_LOGIN_PATH = "/api/v1/user/sessions";
 const API_VERIFY_OTP_PATH = "/api/v1/user/sessions/verify_otp";
@@ -33,7 +33,7 @@ function useAuthProvider() {
     if (typeof permissions === "string") {
       permissions = [permissions];
     }
-    return intersection(permissions, user?.role.permissions).length > 0;
+    return intersection(permissions, user?.permissions).length > 0;
   };
 
   const fetcher = async (...args) => {
@@ -103,19 +103,17 @@ function useAuthProvider() {
     }
     return json.user;
   });
-  const login = async (email, password) => {
+  const login = async (email, password, deviceToken) => {
     const json = await fetcher(API_LOGIN_PATH, {
       method: "POST",
       body: JSON.stringify({
-        user: {
-          email,
-          password,
-        },
+        email,
+        password,
+        device_token: deviceToken,
       }),
     });
     if (json?.response.status === 201) {
       setAuthStatus("preparing");
-      mutateCurrentUser();
     }
     return json;
   };

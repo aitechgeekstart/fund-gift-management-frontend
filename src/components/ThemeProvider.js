@@ -1,20 +1,29 @@
 "use client";
-
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import CircularProgress from "@mui/material/CircularProgress";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Suspense } from "react";
 
 const primary = {
-  main: "#9e805e",
+  main: "#716f46",
+  dark: "#5a5838",
+  light: "#8d8b6a",
+  contrastText: "#fdf7dd",
+};
+
+const secondary = {
+  main: "#9c8a68",
   light: "#9d8a68",
   dark: "#7d6e53",
   contrastText: "#fff",
 };
 
-const secondary = {
-  main: "#ae9973",
-  dark: "#8d7c5d",
-  light: "#b6a381",
+const tertiary = {
+  main: "#7f825a",
+  dark: "#656848",
+  light: "#989b7a",
+  contrastText: "#fdf7dd",
 };
 
 const yellow = {
@@ -31,15 +40,40 @@ const grey = {
 
 const white = {
   main: "#ffff",
+  contrastText: primary.main,
+};
+
+const drawer = {
+  main: primary.main,
+  textMain: white.main,
+  hover: primary.light,
+  textHover: white.main,
+  buttonhover: primary.dark,
+  buttontextHover: white.main,
+  selected: primary.dark,
+  textSelected: primary.dark,
+};
+const menu = {
+  background: tertiary.main,
+  color: tertiary.contrastText,
+  boxShadow: tertiary.main,
+};
+const appBar = {
+  backgroundColor: primary.main,
+  text: white.main,
 };
 
 const theme = createTheme({
   palette: {
     primary,
     secondary,
+    tertiary,
     yellow,
     grey,
     white,
+    drawer,
+    menu,
+    appBar,
     contrastText: {
       default: "#3D3D3D",
     },
@@ -73,7 +107,7 @@ export default function MUIThemeProvider({ children }) {
     <AppRouterCacheProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {children}
+        <Suspense fallback={<CircularProgress />}>{children}</Suspense>
       </ThemeProvider>
     </AppRouterCacheProvider>
   );

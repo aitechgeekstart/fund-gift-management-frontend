@@ -1,36 +1,40 @@
-import { useAuth } from "@/hooks/use-auth";
 import crypto from "crypto";
+import { omit } from "lodash";
 import QueryString from "query-string";
 import useSWR from "swr";
+import { useAuth } from "/src/hooks/use-auth";
 
 export default function useCustomSWR(
   ready,
   path,
-  auth = true,
+  auth,
   options = {
+    revalidateIfStale: true,
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
+    revalidateOnReconnect: true,
     permissions: [],
   },
   queryParams = {},
   method = "GET",
   requestBody = null,
 ) {
-  let swrOption = {
-    suspense: false,
+  const { fetcherWithToken, fetcher, can } = useAuth();
+
+  options = {
     revalidateIfStale: true,
     revalidateOnFocus: false,
     revalidateOnMount: true,
     revalidateOnReconnect: true,
-    dedupingInterval: 6000, // แคชข้อมูลเป็นเวลา 60 วินาที
+    permissions: [],
     ...options,
   };
-
-  const { fetcherWithAuth, fetcher, can, user } = useAuth();
   // check permissions
-  // if (swrOption.permissions?.length > 0 && !can(swrOption.permissions)) {
-  //   ready = false;
-  // } else {
-  //   swrOption = omit(swrOption, ["permissions"]);
-  // }
+  if (options.permissions.length > 0 && !can(options.permissions)) {
+    ready = false;
+  } else {
+    options = omit(options, ["permissions"]);
+  }
   if (!queryParams) {
     queryParams = {};
   }
@@ -42,6 +46,7 @@ export default function useCustomSWR(
     .update(JSON.stringify({ ...queryParams, ...requestBody }))
     .digest("hex")
     .substring(0, 8);
+
   queryParams.sha = hash;
   let _path = path;
   if (Object.keys(queryParams).length > 0) {
@@ -52,7 +57,9 @@ export default function useCustomSWR(
   }
 
   let _fetcher = fetcher;
-  _fetcher = fetcherWithAuth;
+  if (auth) {
+    _fetcher = fetcherWithToken;
+  }
   const __fetcher = async (...args) => {
     if (!args[1]) args.push({});
     if (method !== "GET") {
@@ -63,10 +70,8 @@ export default function useCustomSWR(
     }
     return _fetcher(...args);
   };
-  const readyCheck = () => {
-    return ready;
-  };
-  const swr = useSWR(readyCheck() ? _path : null, __fetcher, swrOption);
-  const rowCount = swr.data?.total_count || 0;
-  return { ...swr, rowCount };
+  return useSWR(ready ? _path : null, __fetcher, {
+    ...options,
+    dedupingInterval: 60000, // แคชข้อมูลเป็นเวลา 60 วินาที
+  });
 }

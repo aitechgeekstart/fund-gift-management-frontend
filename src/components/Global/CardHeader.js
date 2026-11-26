@@ -3,8 +3,8 @@ import { styled } from "@mui/material/styles";
 
 const StyledCardHeader = styled((props) => <CardHeader {...props} />)(
   ({ theme }) => ({
-    background: theme.palette.yellow.light,
-    color: theme.palette.primary.main,
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
     padding: "10px 10px 10px 25px",
     display: "flex",
     flexDirection: "column",

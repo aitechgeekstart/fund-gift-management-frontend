@@ -1,6 +1,16 @@
 "use client";
+import { Button, FormLabel, OTPInput } from "@/components/Global";
+import { useAuth } from "@/hooks/forgot_password/use-auth";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Alert, Box, Grid, Paper, Stack, TextField } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/system";
 import { isArray } from "lodash";
 import NextImage from "next/image";
@@ -8,14 +18,6 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useImmer } from "use-immer";
-import {
-  Button,
-  FormLabel,
-  LoadingButton,
-  OTPInput,
-  Typography,
-} from "/src/components/Global";
-import { useAuth } from "/src/hooks/forgot_password/use-auth";
 
 const defaultData = {
   email: "",
@@ -186,11 +188,7 @@ export default function Page() {
 
   return (
     <Grid
-      item
-      xs={12}
-      sm={10}
-      md={7}
-      lg={5}
+      size={{ xs: 12, sm: 12, md: 7, lg: 5 }}
       component={Paper}
       elevation={0}
       square={false}
@@ -249,15 +247,15 @@ export default function Page() {
               container
               spacing={1}
               direction="row"
-              justifyContent="space-between"
+              sx={{ justifyContent: "space-between" }}
             >
-              <Grid item xs={6}>
+              <Grid size={6}>
                 <FormLabel>Email : {formData.email}</FormLabel>
               </Grid>
-              <Grid item xs={6} sx={{ textAlign: "right" }}>
+              <Grid size={6} sx={{ textAlign: "right" }}>
                 <FormLabel>OTP REF : {formData.ref}</FormLabel>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <OTPInput onChange={(value) => onFormChange(value, "otp")} />
               </Grid>
             </Grid>
@@ -271,7 +269,7 @@ export default function Page() {
               justifyContent: "center",
             }}
           >
-            <LoadingButton
+            <Button
               fullWidth
               color="primary"
               variant="contained"
@@ -280,9 +278,9 @@ export default function Page() {
               loading={loading}
             >
               Submit
-            </LoadingButton>
+            </Button>
 
-            <LoadingButton
+            <Button
               fullWidth
               color="primary"
               variant="outlined"
@@ -290,7 +288,7 @@ export default function Page() {
               onClick={() => forgotPassword()}
             >
               {countdown === 0 ? "Re-Send" : `Re-Send [${countdown}]`}
-            </LoadingButton>
+            </Button>
 
             <Button
               fullWidth
@@ -351,12 +349,12 @@ export default function Page() {
               container
               spacing={1}
               direction="row"
-              justifyContent="space-between"
+              sx={{ justifyContent: "space-between" }}
             >
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <FormLabel required>Email</FormLabel>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <CustomTextField
                   disabled={hasOtp}
                   helperText={error.email}
@@ -378,7 +376,7 @@ export default function Page() {
                 justifyContent: "center",
               }}
             >
-              <LoadingButton
+              <Button
                 fullWidth
                 color="primary"
                 variant="contained"
@@ -388,7 +386,7 @@ export default function Page() {
                 onClick={() => forgotPassword()}
               >
                 {countdown === 0 ? "Submit" : `Submit [${countdown}]`}
-              </LoadingButton>
+              </Button>
 
               <Button
                 fullWidth

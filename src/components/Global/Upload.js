@@ -32,6 +32,7 @@ export default function Upload(props) {
     variant,
     minWidth,
     error,
+    imgSize = { width: 150, height: 150, cols: 4 },
     removable = true,
   } = props;
 
@@ -155,7 +156,7 @@ export default function Upload(props) {
       spacing={2}
       sx={{
         display: "block",
-        marginLeft: 0,
+        marginLeft: "0px !important",
         alignItems: "center",
         ...boxStyle,
       }}
@@ -293,16 +294,25 @@ export default function Upload(props) {
       {!multiple && !!attachment && (
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
           {fileList === "image" ? (
-            <ImageList cols={4}>
-              <ImageListItem style={{ width: "150px", height: "150px" }}>
+            <ImageList cols={imgSize.cols || 4} style={{ width: "100%" }}>
+              <ImageListItem
+                sx={{
+                  width: "100%",
+                  height: "auto !important",
+                }}
+              >
                 {(filterUploadList().src || filterUploadList().url) && (
                   <Image
                     src={filterUploadList().src || filterUploadList().url}
                     alt={filterUploadList().name}
-                    width={150}
-                    height={150}
+                    width={imgSize.width}
+                    height={imgSize.height}
                     priority
-                    style={{ objectFit: "cover" }}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain",
+                    }}
                   />
                 )}
                 <ImageListItemBar

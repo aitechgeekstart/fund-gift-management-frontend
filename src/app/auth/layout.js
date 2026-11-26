@@ -1,14 +1,13 @@
 "use client";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider, styled } from "@mui/material/styles";
+import AppCopyright from "@/components/Layout/AppCopyright";
+import Breadcrumbs from "@/components/Layout/Breadcrumbs";
+import Sidebar, { drawerWidth } from "@/components/Layout/Sidebar";
+import ApplicationConfigProvider from "@/hooks/use-application-config";
+import { AuthProvider } from "@/hooks/use-auth";
+import CircularProgress from "@mui/material/CircularProgress";
+import { styled } from "@mui/material/styles";
 import { SnackbarProvider } from "notistack";
 import { Suspense, useState } from "react";
-import AppCopyright from "/src/components/Layout/AppCopyright";
-import Breadcrumbs from "/src/components/Layout/Breadcrumbs";
-import Sidebar, { drawerWidth } from "/src/components/Layout/Sidebar";
-import theme from "/src/config/theme";
-import ApplicationConfigProvider from "/src/hooks/use-application-config";
-import { AuthProvider } from "/src/hooks/use-auth";
 
 const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
@@ -63,22 +62,19 @@ export default function Layout({ children }) {
         }}
       >
         <AuthProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Sidebar
-              open={open}
-              handleDrawerOpen={handleDrawerOpen}
-              handleDrawerClose={handleDrawerClose}
-              sx={{ width: "230px" }}
-            />
-            <Suspense>
-              <Main open={open} onClick={handleDrawerClose}>
-                <Breadcrumbs />
-                {children}
-                <AppCopyright sx={{ mt: 8, mb: 4 }} />
-              </Main>
-            </Suspense>
-          </ThemeProvider>
+          <Sidebar
+            open={open}
+            handleDrawerOpen={handleDrawerOpen}
+            handleDrawerClose={handleDrawerClose}
+            sx={{ width: "230px" }}
+          />
+          <Suspense>
+            <Main open={open} onClick={handleDrawerClose}>
+              <Breadcrumbs />
+              <Suspense fallback={<CircularProgress />}>{children}</Suspense>
+              <AppCopyright sx={{ mt: 8, mb: 4 }} />
+            </Main>
+          </Suspense>
         </AuthProvider>
       </SnackbarProvider>
     </ApplicationConfigProvider>

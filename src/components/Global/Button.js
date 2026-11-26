@@ -9,6 +9,7 @@ const StyledButton = styled((props) => (
   textTransform: "none",
   minHeight: "33px",
   padding: "9px",
+  boxShadow: "none",
 }));
 
 const CustomButton = (props) => {

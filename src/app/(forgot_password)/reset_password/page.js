@@ -1,4 +1,11 @@
 "use client";
+import {
+  FormLabel,
+  LoadingButton,
+  TextField,
+  Typography,
+} from "@/components/Global";
+import { useAuth } from "@/hooks/forgot_password/use-auth";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -17,13 +24,6 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useImmer } from "use-immer";
-import {
-  FormLabel,
-  LoadingButton,
-  TextField,
-  Typography,
-} from "/src/components/Global";
-import { useAuth } from "/src/hooks/forgot_password/use-auth";
 
 const defaultData = {
   password: "",
@@ -122,11 +122,7 @@ export default function Page() {
 
   return (
     <Grid
-      item
-      xs={12}
-      sm={10}
-      md={7}
-      lg={5}
+      size={{ xs: 12, sm: 10, md: 7, lg: 5 }}
       component={Paper}
       elevation={0}
       square={false}
@@ -183,12 +179,12 @@ export default function Page() {
             container
             spacing={1}
             direction="row"
-            justifyContent="space-between"
+            sx={{ justifyContent: "space-between" }}
           >
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormLabel required>Password</FormLabel>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 autoComplete="disabled"
                 name="password"
@@ -215,7 +211,7 @@ export default function Page() {
               />
             </Grid>
 
-            <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
+            <Grid size={12} sx={{ mt: 1, mb: 1 }}>
               <Typography variant="body2" color="grey" sx={{ fontWeight: 400 }}>
                 Your password must follow these rules
                 <ul style={{ margin: 0, padding: "0 23px" }}>
@@ -227,10 +223,10 @@ export default function Page() {
               </Typography>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormLabel required>Confirm Password</FormLabel>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 autoComplete="disabled"
                 name="password_confirmation"

@@ -1,5 +1,6 @@
 import urlJoin from "url-join";
 const hostname = process.env.API_HOSTNAME;
+
 export const getApiPath = (
   path = null,
   withHostname = true,

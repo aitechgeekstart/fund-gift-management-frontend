@@ -1,6 +1,6 @@
+import { LoadingScreen } from "@/components/Global";
 import { Container, Typography } from "@mui/material";
 import Image from "next/image";
-import { LoadingScreen } from "/src/components/Global";
 
 export default function NoPermission(props) {
   const { loading } = props;

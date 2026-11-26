@@ -16,7 +16,7 @@ const StyledFormLabel = styled((props) => <FormLabel {...props} />)(
 );
 
 const CustomFormLabel = (props) => {
-  const { color, fontWeight = 800, ...others } = props;
+  const { color = "primary", fontWeight = 800, ...others } = props;
 
   return <StyledFormLabel color={color} fontWeight={fontWeight} {...others} />;
 };

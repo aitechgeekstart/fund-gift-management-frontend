@@ -1,6 +1,6 @@
+import { useAuth } from "@/hooks/use-auth";
 import LoadingScreen from "./LoadingScreen";
 import NoPermission from "./NoPermission";
-import { useAuth } from "/src/hooks/use-auth";
 
 export default function CheckLayoutPermission({ permissions, children }) {
   const { can, authStatus } = useAuth();
