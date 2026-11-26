@@ -1,5 +1,5 @@
 "use client";
-import { FormLabel, LoadingButton, TextField } from "@/components/Global";
+import { Button, FormLabel, TextField } from "@/components/Global";
 import { useAuth } from "@/hooks/forgot_password/use-auth";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Visibility from "@mui/icons-material/Visibility";
@@ -262,7 +262,7 @@ export default function Page() {
               justifyContent: "center",
             }}
           >
-            <LoadingButton
+            <Button
               color="primary"
               variant="contained"
               loadingPosition="start"
@@ -271,7 +271,7 @@ export default function Page() {
               onClick={() => handleSubmit()}
             >
               Confirm Password
-            </LoadingButton>
+            </Button>
           </Stack>
         </Box>
       </Box>
