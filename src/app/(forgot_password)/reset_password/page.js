@@ -1,10 +1,5 @@
 "use client";
-import {
-  FormLabel,
-  LoadingButton,
-  TextField,
-  Typography,
-} from "@/components/Global";
+import { FormLabel, LoadingButton, TextField } from "@/components/Global";
 import { useAuth } from "@/hooks/forgot_password/use-auth";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Visibility from "@mui/icons-material/Visibility";
@@ -17,6 +12,7 @@ import {
   InputAdornment,
   Paper,
   Stack,
+  Typography,
 } from "@mui/material";
 import { isArray } from "lodash";
 import NextImage from "next/image";
