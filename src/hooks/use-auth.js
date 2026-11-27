@@ -47,11 +47,12 @@ function useAuthProvider() {
       options.headers = {};
     }
     options.credentials = "include";
-    let isFormData = null;
-    if (options.is_form_data !== null) {
-      isFormData = options.is_form_data;
-    }
-    if (!isFormData) {
+    const isFormData = options.body instanceof FormData;
+
+    if (isFormData) {
+      delete options.headers["content-type"];
+      delete options.headers["Content-Type"];
+    } else {
       options.headers["content-type"] = "application/json";
     }
     let response = await fetch(...args);

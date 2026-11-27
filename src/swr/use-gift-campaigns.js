@@ -1,5 +1,5 @@
-import { decorate } from "/src/decorators";
-import useCustomSWR from "/src/swr/use-custom-swr";
+import { decorate } from "@/decorators";
+import useCustomSWR from "@/swr/use-custom-swr";
 
 export function useGiftCampaigns(isReady = false, params = {}) {
   const swr = useCustomSWR(

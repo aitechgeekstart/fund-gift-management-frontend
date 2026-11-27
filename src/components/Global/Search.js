@@ -1,10 +1,10 @@
+import { Button } from "@/components/Global";
+import TextField from "@/components/Global/TextField";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Grid } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
-import { Button } from "/src/components/Global";
-import TextField from "/src/components/Global/TextField";
 
 const SearchTextField = styled((props) => (
   <TextField

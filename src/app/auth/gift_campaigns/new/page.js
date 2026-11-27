@@ -1,12 +1,12 @@
 "use client";
+import GiftCampaignForm from "@/components/Forms/GiftCampaignForm";
+import { CardHeader } from "@/components/Global";
 import { convertToFormData } from "@/helpers/convertToFormData";
+import { useApplicationConfig } from "@/hooks/use-application-config";
+import { useAuth } from "@/hooks/use-auth";
 import { Alert, Card, CardContent } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import GiftCampaignForm from "/src/components/Forms/GiftCampaignForm";
-import { CardHeader } from "/src/components/Global";
-import { useApplicationConfig } from "/src/hooks/use-application-config";
-import { useAuth } from "/src/hooks/use-auth";
 
 export default function Page() {
   const applicationConfig = useApplicationConfig();

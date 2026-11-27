@@ -126,7 +126,7 @@ export default function GiftCampaignTable(props) {
       headerName: "Status",
       align: "center",
       headerAlign: "center",
-      width: 100,
+      width: 130,
       renderCell: (params) => {
         return <StatusLabel label={params.row.status} />;
       },

@@ -1,15 +1,15 @@
 "use client";
+import GiftCampaignForm from "@/components/Forms/GiftCampaignForm";
+import { CardHeader, LoadingScreen } from "@/components/Global";
 import { convertToFormData } from "@/helpers/convertToFormData";
+import { useApplicationConfig } from "@/hooks/use-application-config";
+import { useAuth } from "@/hooks/use-auth";
 import { useGiftCampaign } from "@/swr/use-gift-campaigns";
 import { Alert, Card, CardContent } from "@mui/material";
 import { isEmpty } from "lodash";
 import { useParams, useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import GiftCampaignForm from "/src/components/Forms/GiftCampaignForm";
-import { CardHeader, LoadingScreen } from "/src/components/Global";
-import { useApplicationConfig } from "/src/hooks/use-application-config";
-import { useAuth } from "/src/hooks/use-auth";
 
 export default function Page() {
   const router = useRouter();

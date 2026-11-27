@@ -7,7 +7,6 @@ import {
   Upload,
 } from "@/components/Global";
 import dayjs from "@/helpers/dayjs";
-import SaveIcon from "@mui/icons-material/Save";
 import {
   Box,
   Grid,
@@ -76,13 +75,11 @@ const defaultParams = {
   gift_valid_until: "",
   digital_enabled: true,
   physical_enabled: true,
-  digital_stock_mode: "",
+  digital_stock_mode: "limit",
   digital_stock_limit: "",
   digital_gifts_per_redemption: 1,
-  physical_stock_mode: "",
+  physical_stock_mode: "limit",
   physical_stock_limit: "",
-  digital_type: "manual",
-  physical_type: "allow",
   image: "",
 };
 
@@ -94,77 +91,10 @@ export default function GiftCampaignForm(props) {
       ? {
           ...defaultParams,
           ...initialData,
-          ...(initialData.digital_enabled &&
-            initialData.digital_stock_limit === 0 && {
-              digital_type:
-                initialData.digital_stock_limit > 0 ? "manual" : "auto",
-            }),
-          physical_type: initialData.physical_enabled ? "allow" : "not_allow",
         }
       : { ...defaultParams },
   );
   const [error, setError] = useState({});
-
-  useEffect(() => {
-    if (Object.entries(error).length > 0) {
-      validateForm();
-    }
-  }, [formData]);
-
-  const onFormChange = (key, value) => {
-    setFormData((draft) => {
-      draft[key] = value;
-    });
-    if (Object.entries(error).length > 0) {
-      validateForm();
-    }
-  };
-
-  const onMultipleFormChange = (obj) => {
-    setFormData((draft) => {
-      Object.entries(obj).forEach(([key, value]) => {
-        draft[key] = value;
-      });
-    });
-    if (Object.entries(error).length > 0) {
-      validateForm();
-    }
-  };
-
-  const onDigitalTypeChange = (value) => {
-    if (value === "no") {
-      onMultipleFormChange({
-        digital_enabled: false,
-        digital_type: value,
-        digital_stock_limit: "",
-        digital_gifts_per_redemption: "",
-      });
-    } else {
-      onMultipleFormChange({
-        digital_enabled: true,
-        digital_type: value,
-        digital_gifts_per_redemption:
-          formData.digital_gifts_per_redemption === ""
-            ? 1
-            : formData.digital_gifts_per_redemption,
-      });
-    }
-  };
-
-  const onPhysicalTypeChange = (value) => {
-    if (value === "not_allow") {
-      onMultipleFormChange({
-        physical_enabled: false,
-        physical_type: value,
-        physical_stock_limit: "",
-      });
-    } else {
-      onMultipleFormChange({
-        physical_enabled: true,
-        physical_type: value,
-      });
-    }
-  };
 
   const validateForm = () => {
     const keys = [
@@ -198,7 +128,68 @@ export default function GiftCampaignForm(props) {
     return Object.keys(formError).length < 1;
   };
 
-  const _handleSubmit = () => {
+  useEffect(() => {
+    if (Object.entries(error).length > 0) {
+      validateForm();
+    }
+  }, [formData]);
+
+  const onFormChange = (key, value) => {
+    setFormData((draft) => {
+      draft[key] = value;
+    });
+    if (Object.entries(error).length > 0) {
+      validateForm();
+    }
+  };
+
+  const onMultipleFormChange = (obj) => {
+    setFormData((draft) => {
+      Object.entries(obj).forEach(([key, value]) => {
+        draft[key] = value;
+      });
+    });
+    if (Object.entries(error).length > 0) {
+      validateForm();
+    }
+  };
+
+  const onDigitalTypeChange = (value) => {
+    if (value === "no") {
+      onMultipleFormChange({
+        digital_enabled: false,
+        digital_stock_mode: value,
+        digital_stock_limit: "",
+        digital_gifts_per_redemption: "",
+      });
+    } else {
+      onMultipleFormChange({
+        digital_enabled: true,
+        digital_stock_mode: value,
+        digital_gifts_per_redemption:
+          formData.digital_gifts_per_redemption === ""
+            ? 1
+            : formData.digital_gifts_per_redemption,
+      });
+    }
+  };
+
+  const onPhysicalTypeChange = (value) => {
+    if (value === "not_allow") {
+      onMultipleFormChange({
+        physical_enabled: false,
+        physical_stock_mode: value,
+        physical_stock_limit: "",
+      });
+    } else {
+      onMultipleFormChange({
+        physical_enabled: true,
+        physical_stock_mode: value,
+      });
+    }
+  };
+
+  const _handleSubmit = async () => {
     if (validateForm()) {
       // reformat data
       let _params = {
@@ -208,10 +199,19 @@ export default function GiftCampaignForm(props) {
         ends_at: dayjs(formData.gift_valid_until).format("YYYY-MM-DD"),
         gift_valid_from: dayjs(formData.gift_valid_from).format("YYYY-MM-DD"),
         gift_valid_until: dayjs(formData.gift_valid_until).format("YYYY-MM-DD"),
+        digital_stock_mode: formData.digital_stock_mode,
+        physical_stock_mode: formData.physical_stock_mode,
         digital_enabled: formData.digital_enabled,
         physical_enabled: formData.physical_enabled,
       };
-      if (!!formData.image) {
+      if (!!formData.images[0]?.url) {
+        const file = await urlToFile(
+          formData.images[0].url,
+          formData.images[0].name,
+          formData.images[0].content_type,
+        );
+        _params["images"] = file;
+      } else {
         _params["images"] = [formData.image];
       }
       if (formData.digital_enabled) {
@@ -271,12 +271,12 @@ export default function GiftCampaignForm(props) {
             <Grid size={{ xs: 12, sm: 12, md: 12 }}>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                 <CustomToggleButton
-                  value={formData.digital_type}
+                  value={formData.digital_stock_mode}
                   onChange={onDigitalTypeChange}
                   options={[
-                    { value: "no", label: "No" },
-                    { value: "manual", label: "Manual" },
-                    { value: "auto", label: "Auto" },
+                    { value: "unlimited", label: "No" },
+                    { value: "limit", label: "Manual" },
+                    { value: "code_pool", label: "Auto" },
                   ]}
                 />
               </Box>
@@ -296,7 +296,7 @@ export default function GiftCampaignForm(props) {
                   error={!!error.digital_stock_limit}
                   value={formData.digital_stock_limit}
                   allowNegative={false}
-                  disabled={formData.digital_type === "no"}
+                  disabled={formData.digital_stock_mode === "no"}
                   onValueChange={(e) =>
                     onFormChange("digital_stock_limit", e.value)
                   }
@@ -318,7 +318,7 @@ export default function GiftCampaignForm(props) {
                   error={!!error.digital_gifts_per_redemption}
                   value={formData.digital_gifts_per_redemption}
                   allowNegative={false}
-                  disabled={formData.digital_type === "no"}
+                  disabled={formData.digital_stock_mode === "no"}
                   onValueChange={(e) =>
                     onFormChange("digital_gifts_per_redemption", e.value)
                   }
@@ -334,11 +334,11 @@ export default function GiftCampaignForm(props) {
             <Grid size={{ xs: 12, sm: 12, md: 12 }}>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                 <CustomToggleButton
-                  value={formData.physical_type}
+                  value={formData.physical_stock_mode}
                   onChange={onPhysicalTypeChange}
                   options={[
-                    { value: "not_allow", label: "Not Allow Post" },
-                    { value: "allow", label: "Allow Post" },
+                    { value: "unlimited", label: "Not Allow Post" },
+                    { value: "limit", label: "Allow Post" },
                   ]}
                 />
               </Box>
@@ -358,7 +358,7 @@ export default function GiftCampaignForm(props) {
                   error={!!error.physical_stock_limit}
                   value={formData.physical_stock_limit}
                   allowNegative={false}
-                  disabled={formData.digital_type === "not_allow"}
+                  disabled={formData.digital_stock_mode === "not_allow"}
                   onValueChange={(e) =>
                     onFormChange("physical_stock_limit", e.value)
                   }
@@ -445,12 +445,10 @@ export default function GiftCampaignForm(props) {
           <Button
             color="primary"
             variant="contained"
-            loadingPosition="start"
             loading={loading}
-            startIcon={<SaveIcon />}
             onClick={() => _handleSubmit()}
           >
-            Create Gift
+            Save Gift
           </Button>
         </Grid>
       </Grid>

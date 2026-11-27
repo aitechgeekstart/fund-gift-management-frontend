@@ -1,8 +1,8 @@
+import { useAuth } from "@/hooks/use-auth";
 import crypto from "crypto";
 import { omit } from "lodash";
 import QueryString from "query-string";
 import useSWR from "swr";
-import { useAuth } from "/src/hooks/use-auth";
 
 export default function useCustomSWR(
   ready,

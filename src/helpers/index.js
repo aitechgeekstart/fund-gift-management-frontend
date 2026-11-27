@@ -3,6 +3,7 @@ import dayjs from "./dayjs";
 import { getApiPath } from "./getApiPath";
 import { numberWithCommas } from "./numberWithCommas";
 import { translateFromKey } from "./translate";
+import { urlToFile } from "./urlToFile";
 import {
   thaiNationalIDValidation,
   validateEmail,
@@ -16,6 +17,7 @@ export {
   numberWithCommas,
   thaiNationalIDValidation,
   translateFromKey,
+  urlToFile,
   validateEmail,
   validateForm,
 };

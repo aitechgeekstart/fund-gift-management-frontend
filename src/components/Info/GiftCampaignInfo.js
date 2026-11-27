@@ -23,6 +23,9 @@ export default function GiftCampaignInfo(props) {
     createdBy,
     publish,
     loading,
+    canEdit,
+    canPublish,
+    canRevoke,
   } = props;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -31,18 +34,17 @@ export default function GiftCampaignInfo(props) {
   const renderGiftCampaignAction = () => {
     return (
       <Stack direction="row" spacing={2} sx={{ justifySelf: "end" }}>
-        {can(["api/v1/user/gift_campaigns#create"]) && (
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ width: "80px" }}
-            onClick={() => {
-              window.location = `/auth/gift_campaigns/${id}/edit`;
-            }}
-          >
-            Edit
-          </Button>
-        )}
+        <Button
+          canShow={canEdit}
+          variant="contained"
+          color="secondary"
+          sx={{ width: "80px" }}
+          onClick={() => {
+            window.location = `/auth/gift_campaigns/${id}/edit`;
+          }}
+        >
+          Edit
+        </Button>
       </Stack>
     );
   };
@@ -215,6 +217,7 @@ export default function GiftCampaignInfo(props) {
 
         <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
           <Button
+            canShow={canPublish}
             variant="contained"
             color="secondary"
             loading={loading}
@@ -222,10 +225,7 @@ export default function GiftCampaignInfo(props) {
           >
             Publish
           </Button>
-          <Button variant="contained" color="warning">
-            Disable Claim
-          </Button>
-          <Button variant="outlined" color="error">
+          <Button canShow={canRevoke} variant="outlined" color="error">
             Cancel Gift
           </Button>
         </Stack>
